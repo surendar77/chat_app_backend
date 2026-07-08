@@ -1,28 +1,36 @@
-import gradio as gr
-import requests
+from fastapi import FastAPI
+from pydantic import BaseModel
+from google import genai
+import uvicorn
 
-FASTAPI_URL = "http://127.0.0.1:8000/chat"
+# Gemini Client
+client = genai.Client(api_key="AQ.Ab8RN6LkAuZCn7VbdZtaPMnEmo3Of5xrxPSYhzJFKiW_6ALOnQ")
 
-def chat(message):
-    response = requests.post(
-        FASTAPI_URL,
-        json={"message": message}
+# FastAPI App
+app = FastAPI()
+
+# Request Model
+class ChatRequest(BaseModel):
+    message: str
+
+# Home Endpoint
+@app.get("/")
+def home():
+    return {"message": "Gemini AI Backend is Running"}
+
+# Chat Endpoint
+@app.post("/chat")
+def chat(request: ChatRequest):
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=request.message
     )
 
-    if response.status_code == 200:
-        return response.json()["answer"]
-    else:
-        return "Error connecting to FastAPI"
+    return {
+        "question": request.message,
+        "answer": response.text
+    }
 
-demo = gr.Interface(
-    fn=chat,
-    inputs=gr.Textbox(
-        label="Ask Gemini",
-        placeholder="Type your question..."
-    ),
-    outputs=gr.Textbox(label="Gemini Response"),
-    title="Gemini AI Chatbot",
-    description="Gradio + FastAPI + Gemini"
-)
-
-demo.launch()
+# Run Server
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
