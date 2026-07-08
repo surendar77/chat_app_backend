@@ -1,2 +1,4 @@
-gradio
-requests
+fastapi
+pydantic
+google-genai
+uvicorn
