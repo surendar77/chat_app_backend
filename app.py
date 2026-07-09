@@ -4,7 +4,7 @@ from google import genai
 import uvicorn
 
 # Gemini Client
-client = genai.Client(api_key="AQ.Ab8RN6LkAuZCn7VbdZtaPMnEmo3Of5xrxPSYhzJFKiW_6ALOnQ")
+client = genai.Client(api_key="GEMINI_API_KEY")
 
 # FastAPI App
 app = FastAPI()
@@ -31,6 +31,5 @@ def chat(request: ChatRequest):
         "answer": response.text
     }
 
-# Run Server
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
