@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from google import genai
 import uvicorn
-
+import os
 # Gemini Client
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
