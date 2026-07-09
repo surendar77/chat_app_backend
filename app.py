@@ -4,7 +4,7 @@ from google import genai
 import uvicorn
 
 # Gemini Client
-client = genai.Client(api_key="GEMINI_API_KEY")
+client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 # FastAPI App
 app = FastAPI()
